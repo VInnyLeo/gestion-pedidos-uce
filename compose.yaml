@@ -110,6 +110,45 @@ services:
     networks:
       - pedidos-net
 
+  delivery-db:
+    image: postgres:18-alpine
+    container_name: delivery-db
+    environment:
+      POSTGRES_DB: delivery_db
+      POSTGRES_USER: ${DELIVERY_DB_USER}
+      POSTGRES_PASSWORD: ${DELIVERY_DB_PASSWORD}
+    ports:
+      - "5435:5432"
+    volumes:
+      - delivery-data:/var/lib/postgresql
+    networks:
+      - pedidos-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  delivery-service:
+    build: ./delivery-service
+    image: delivery-service:1.0
+    container_name: delivery-service
+    environment:
+      DB_URL: jdbc:postgresql://delivery-db:5432/delivery_db
+      DB_USER: ${DELIVERY_DB_USER}
+      DB_PASSWORD: ${DELIVERY_DB_PASSWORD}
+      ORDER_SERVICE_URL: http://order-service:8080
+      NOTIFICATION_SERVICE_URL: http://notification-service:8080
+    ports:
+      - "8084:8080"
+    depends_on:
+      delivery-db:
+        condition: service_healthy
+      order-service:
+        condition: service_started
+    networks:
+      - pedidos-net
+
   notification-service:
     build: ./notification-service
     image: notification-service:1.0
@@ -123,6 +162,7 @@ volumes:
   customer-data:
   product-data:
   order-data:
+  delivery-data:
 
 networks:
   pedidos-net:

@@ -1,0 +1,28 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: delivery-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5435/delivery_db}
+    username: ${DB_USER:delivery_user}
+    password: ${DB_PASSWORD:delivery_pass}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+clients:
+  timeout-ms: ${CLIENT_TIMEOUT_MS:2000}
+  order-url: ${ORDER_SERVICE_URL:http://localhost:8083}
+  notification-url: ${NOTIFICATION_SERVICE_URL:http://localhost:8085}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always

@@ -17,7 +17,7 @@ Content-Type: application/json
 GET {{baseUrl}}/api/orders
 
 ### 3. Consultar el pedido 1 (200)
-GET {{baseUrl}}/api/orders/1
+GET {{baseUrl}}/api/orders/2
 
 ### 4. Cliente que no existe (404)
 POST {{baseUrl}}/api/orders

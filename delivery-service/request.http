@@ -1,0 +1,55 @@
+@baseUrl = http://localhost:8084
+@orderId = 2
+
+### 1. Registrar la entrega del pedido 2 (201)
+POST {{baseUrl}}/api/deliveries
+Content-Type: application/json
+
+{
+  "orderId": {{orderId}},
+  "courier": "Carlos Mena"
+}
+
+### 2. Listar entregas (200)
+GET {{baseUrl}}/api/deliveries
+
+### 3. Consultar la entrega 1 (200)
+GET {{baseUrl}}/api/deliveries/1
+
+### 4. Segunda entrega para el mismo pedido (409)
+POST {{baseUrl}}/api/deliveries
+Content-Type: application/json
+
+{
+  "orderId": {{orderId}},
+  "courier": "Otro repartidor"
+}
+
+### 5. Pedido que no existe (404)
+POST {{baseUrl}}/api/deliveries
+Content-Type: application/json
+
+{
+  "orderId": 999,
+  "courier": "Carlos Mena"
+}
+
+### 6. Datos inválidos (400)
+POST {{baseUrl}}/api/deliveries
+Content-Type: application/json
+
+{
+  "courier": ""
+}
+
+### 7. Marcar la entrega 1 como entregada (200)
+PATCH {{baseUrl}}/api/deliveries/1/status
+Content-Type: application/json
+
+{ "status": "DELIVERED" }
+
+### 8. Intentar marcarla otra vez (409)
+PATCH {{baseUrl}}/api/deliveries/1/status
+Content-Type: application/json
+
+{ "status": "DELIVERED" }
