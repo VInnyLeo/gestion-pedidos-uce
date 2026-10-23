@@ -69,6 +69,47 @@ services:
     networks:
       - pedidos-net
 
+  order-db:
+    image: postgres:18-alpine
+    container_name: order-db
+    environment:
+      POSTGRES_DB: order_db
+      POSTGRES_USER: ${ORDER_DB_USER}
+      POSTGRES_PASSWORD: ${ORDER_DB_PASSWORD}
+    ports:
+      - "5434:5432"
+    volumes:
+      - order-data:/var/lib/postgresql
+    networks:
+      - pedidos-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  order-service:
+    build: ./order-service
+    image: order-service:1.0
+    environment:
+      DB_URL: jdbc:postgresql://order-db:5432/order_db
+      DB_USER: ${ORDER_DB_USER}
+      DB_PASSWORD: ${ORDER_DB_PASSWORD}
+      CUSTOMER_SERVICE_URL: http://customer-service:8080
+      PRODUCT_SERVICE_URL: http://product-service:8080
+      NOTIFICATION_SERVICE_URL: http://notification-service:8080
+    ports:
+      - "8083:8080"
+    depends_on:
+      order-db:
+        condition: service_healthy
+      customer-service:
+        condition: service_started
+      product-service:
+        condition: service_started
+    networks:
+      - pedidos-net
+
   notification-service:
     build: ./notification-service
     image: notification-service:1.0
@@ -81,6 +122,7 @@ services:
 volumes:
   customer-data:
   product-data:
+  order-data:
 
 networks:
   pedidos-net:

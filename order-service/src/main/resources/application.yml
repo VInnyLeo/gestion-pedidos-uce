@@ -1,0 +1,32 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5434/order_db}
+    username: ${DB_USER:order_user}
+    password: ${DB_PASSWORD:order_pass}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+clients:
+  timeout-ms: ${CLIENT_TIMEOUT_MS:2000}
+  customer-url: ${CUSTOMER_SERVICE_URL:http://localhost:8081}
+  product-url: ${PRODUCT_SERVICE_URL:http://localhost:8082}
+  notification-url: ${NOTIFICATION_SERVICE_URL:http://localhost:8085}
+
+notifications:
+  retry-interval-ms: ${NOTIFICATION_RETRY_MS:30000}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always

@@ -1,0 +1,68 @@
+@baseUrl = http://localhost:8083
+@customerId = 2
+
+### 1. Crear un pedido con 2 productos (201)
+POST {{baseUrl}}/api/orders
+Content-Type: application/json
+
+{
+  "customerId": {{customerId}},
+  "items": [
+    { "productId": 1, "quantity": 2 },
+    { "productId": 2, "quantity": 1 }
+  ]
+}
+
+### 2. Listar pedidos (200)
+GET {{baseUrl}}/api/orders
+
+### 3. Consultar el pedido 1 (200)
+GET {{baseUrl}}/api/orders/1
+
+### 4. Cliente que no existe (404)
+POST {{baseUrl}}/api/orders
+Content-Type: application/json
+
+{
+  "customerId": 999,
+  "items": [ { "productId": 1, "quantity": 1 } ]
+}
+
+### 5. Stock insuficiente (409)
+POST {{baseUrl}}/api/orders
+Content-Type: application/json
+
+{
+  "customerId": {{customerId}},
+  "items": [ { "productId": 2, "quantity": 100 } ]
+}
+
+### 6. Producto que no existe (404)
+POST {{baseUrl}}/api/orders
+Content-Type: application/json
+
+{
+  "customerId": {{customerId}},
+  "items": [ { "productId": 999, "quantity": 1 } ]
+}
+
+### 7. Pedido sin productos (400)
+POST {{baseUrl}}/api/orders
+Content-Type: application/json
+
+{
+  "customerId": {{customerId}},
+  "items": []
+}
+
+### 8. Cambiar estado a IN_DELIVERY (200)
+PATCH {{baseUrl}}/api/orders/1/status
+Content-Type: application/json
+
+{ "status": "IN_DELIVERY" }
+
+### 9. Cambio no permitido: volver a CREATED (409)
+PATCH {{baseUrl}}/api/orders/1/status
+Content-Type: application/json
+
+{ "status": "CREATED" }
