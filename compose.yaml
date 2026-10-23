@@ -12,6 +12,27 @@ services:
       - customer-data:/var/lib/postgresql
     networks:
       - pedidos-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  customer-service:
+    build: ./customer-service
+    image: customer-service:1.0
+    container_name: customer-service
+    environment:
+      DB_URL: jdbc:postgresql://customer-db:5432/customer_db
+      DB_USER: ${CUSTOMER_DB_USER}
+      DB_PASSWORD: ${CUSTOMER_DB_PASSWORD}
+    ports:
+      - "8081:8080"
+    depends_on:
+      customer-db:
+        condition: service_healthy
+    networks:
+      - pedidos-net
 
 volumes:
   customer-data:
