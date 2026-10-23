@@ -1,0 +1,5 @@
+# Scripts que se ejecutan en Linux (dentro de Docker) deben usar finales de línea LF
+mvnw text eol=lf
+*.sh text eol=lf
+# Scripts de Windows usan CRLF
+*.cmd text eol=crlf

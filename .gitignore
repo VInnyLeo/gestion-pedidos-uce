@@ -1,0 +1,15 @@
+# Configuración local con contraseñas (nunca se sube)
+.env
+
+# Código compilado por Maven
+target/
+
+# Configuración personal de editores
+.idea/
+.vscode/
+*.iml
+
+# Archivos del sistema y logs
+Thumbs.db
+.DS_Store
+*.log
