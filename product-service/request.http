@@ -1,0 +1,78 @@
+@baseUrl = http://localhost:8082
+
+### 1. Crear producto: Arroz (201)
+POST {{baseUrl}}/api/products
+Content-Type: application/json
+
+{
+  "name": "Arroz 5 kg",
+  "description": "Arroz blanco de grano largo",
+  "price": 6.50,
+  "stock": 10
+}
+
+### 2. Crear producto: Aceite (201)
+POST {{baseUrl}}/api/products
+Content-Type: application/json
+
+{
+  "name": "Aceite 1 L",
+  "description": "Aceite vegetal",
+  "price": 3.25,
+  "stock": 5
+}
+
+### 3. Listar productos (200)
+GET {{baseUrl}}/api/products
+
+### 4. Consultar el producto 1 (200)
+GET {{baseUrl}}/api/products/1
+
+### 5. Actualizar precio del producto 1 (200)
+PUT {{baseUrl}}/api/products/1
+Content-Type: application/json
+
+{
+  "name": "Arroz 5 kg",
+  "description": "Arroz blanco de grano largo",
+  "price": 6.75,
+  "stock": 10
+}
+
+### 6. Datos inválidos (400)
+POST {{baseUrl}}/api/products
+Content-Type: application/json
+
+{
+  "name": "",
+  "price": -5,
+  "stock": -1
+}
+
+### 7. Producto que no existe (404)
+GET {{baseUrl}}/api/products/999
+
+### 8. Descontar stock: 2 arroces y 1 aceite (200)
+POST {{baseUrl}}/api/products/decrease-stock
+Content-Type: application/json
+
+{
+  "items": [
+    { "productId": 1, "quantity": 2 },
+    { "productId": 2, "quantity": 1 }
+  ]
+}
+
+### 9. Stock insuficiente: TODO O NADA (409)
+POST {{baseUrl}}/api/products/decrease-stock
+Content-Type: application/json
+
+{
+  "items": [
+    { "productId": 1, "quantity": 3 },
+    { "productId": 2, "quantity": 100 }
+  ]
+}
+
+### 10. Comprobar el rollback: el arroz debe seguir en 8, no en 5
+GET {{baseUrl}}/api/products/1

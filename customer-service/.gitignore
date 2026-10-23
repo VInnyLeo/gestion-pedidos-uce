@@ -31,10 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-target/
-.vscode/
-.idea/
-*.iml
-HELP.md
-*.http
