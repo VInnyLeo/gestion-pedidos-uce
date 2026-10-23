@@ -69,6 +69,15 @@ services:
     networks:
       - pedidos-net
 
+  notification-service:
+    build: ./notification-service
+    image: notification-service:1.0
+    container_name: notification-service
+    ports:
+      - "8085:8080"
+    networks:
+      - pedidos-net
+
 volumes:
   customer-data:
   product-data:

@@ -1,0 +1,21 @@
+@baseUrl = http://localhost:8085
+
+### 1. Enviar un aviso (201)
+POST {{baseUrl}}/api/notifications
+Content-Type: application/json
+
+{
+  "customerId": 2,
+  "message": "Tu pedido #1 fue registrado"
+}
+
+### 2. Listar avisos enviados (200)
+GET {{baseUrl}}/api/notifications
+
+### 3. Datos inválidos (400)
+POST {{baseUrl}}/api/notifications
+Content-Type: application/json
+
+{
+  "message": ""
+}
