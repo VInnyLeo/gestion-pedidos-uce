@@ -1,0 +1,53 @@
+### 1. Crear un cliente (debe responder 201)
+POST http://localhost:8080/api/customers
+Content-Type: application/json
+
+{
+  "name": "Ana Pérez",
+  "email": "ana@mail.com",
+  "phone": "0991234567",
+  "address": "Av. Amazonas N24-12, Quito"
+}
+
+### 2. Listar clientes
+GET http://localhost:8080/api/customers
+
+### 3. Consultar el cliente 1
+GET http://localhost:8080/api/customers/1
+
+### 4. Actualizar el cliente 1
+PUT http://localhost:8080/api/customers/1
+Content-Type: application/json
+
+{
+  "name": "Ana Pérez López",
+  "email": "ana@mail.com",
+  "phone": "0991234567",
+  "address": "Av. 6 de Diciembre N30-15, Quito"
+}
+
+### 5. Cliente que no existe (debe responder 404)
+GET http://localhost:8080/api/customers/999
+
+### 6. Datos inválidos (debe responder 400)
+POST http://localhost:8080/api/customers
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": "esto-no-es-un-email",
+  "address": "Quito"
+}
+
+### 7. Email repetido (debe responder 409)
+POST http://localhost:8080/api/customers
+Content-Type: application/json
+
+{
+  "name": "Otra Ana",
+  "email": "ana@mail.com",
+  "address": "Quito"
+}
+
+### 8. Eliminar el cliente 1 (debe responder 204)
+DELETE http://localhost:8080/api/customers/1
