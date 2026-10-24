@@ -6,8 +6,6 @@ services:
       POSTGRES_DB: customer_db
       POSTGRES_USER: ${CUSTOMER_DB_USER}
       POSTGRES_PASSWORD: ${CUSTOMER_DB_PASSWORD}
-    ports:
-      - "5432:5432"
     volumes:
       - customer-data:/var/lib/postgresql
     networks:
@@ -41,8 +39,6 @@ services:
       POSTGRES_DB: product_db
       POSTGRES_USER: ${PRODUCT_DB_USER}
       POSTGRES_PASSWORD: ${PRODUCT_DB_PASSWORD}
-    ports:
-      - "5433:5432"
     volumes:
       - product-data:/var/lib/postgresql
     networks:
@@ -76,8 +72,6 @@ services:
       POSTGRES_DB: order_db
       POSTGRES_USER: ${ORDER_DB_USER}
       POSTGRES_PASSWORD: ${ORDER_DB_PASSWORD}
-    ports:
-      - "5434:5432"
     volumes:
       - order-data:/var/lib/postgresql
     networks:
@@ -98,6 +92,7 @@ services:
       CUSTOMER_SERVICE_URL: http://customer-service:8080
       PRODUCT_SERVICE_URL: http://product-service:8080
       NOTIFICATION_SERVICE_URL: http://notification-service:8080
+      NOTIFICATION_RETRY_MS: ${NOTIFICATION_RETRY_MS:-30000}
     depends_on:
       order-db:
         condition: service_healthy
@@ -107,7 +102,7 @@ services:
         condition: service_healthy
     networks:
       - pedidos-net
-      
+
   order-gateway:
     image: nginx:1.28-alpine
     container_name: order-gateway
@@ -128,8 +123,6 @@ services:
       POSTGRES_DB: delivery_db
       POSTGRES_USER: ${DELIVERY_DB_USER}
       POSTGRES_PASSWORD: ${DELIVERY_DB_PASSWORD}
-    ports:
-      - "5435:5432"
     volumes:
       - delivery-data:/var/lib/postgresql
     networks:
