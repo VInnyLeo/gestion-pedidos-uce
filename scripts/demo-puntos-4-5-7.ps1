@@ -95,7 +95,8 @@ Titulo "7. PUNTO 5 (despues): los datos siguen ahi"
 Write-Host "Son contenedores NUEVOS, pero los datos son los mismos porque viven en los volumenes." -ForegroundColor Yellow
 Mostrar-Datos
 Write-Host "`nY a traves de la API de customer-service:" -ForegroundColor Yellow
-Invoke-RestMethod http://localhost:8081/api/customers | Format-Table id, name, email
+$respuesta = Invoke-WebRequest -Uri http://localhost:8081/api/customers -UseBasicParsing
+([System.Text.Encoding]::UTF8.GetString($respuesta.RawContentStream.ToArray()) | ConvertFrom-Json) | Format-Table id, name, email
 Pausa
 
 Write-Host ""
